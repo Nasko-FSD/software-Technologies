@@ -396,3 +396,15 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+# Exclude JetBrains IDE settings folder (WebStorm, IntelliJ, PyCharm)
+.idea/
+
+# Exclude build output directories
+bin/
+obj/
+
+# Exclude dependencies folder installed by npm or yarn
+node_modules/
+
+# Exclude npm debug logs
+npm-debug.log*
