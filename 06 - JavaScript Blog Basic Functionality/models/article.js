@@ -7,6 +7,16 @@ module.exports = function (sequelize) {
         allowNull: false,
         required: true
       },
+      pictureUrl: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        required: true
+      },
+      summary: {
+          type: Sequelize.TEXT,
+          allowNull: false,
+          required: true
+      },
       content: {
           type: Sequelize.TEXT,
           allowNull: false,

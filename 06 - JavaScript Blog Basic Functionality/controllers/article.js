@@ -10,6 +10,8 @@ module.exports = {
         // take values from request
         const title = req.body.title;
         const content = req.body.content;
+        const pictureUrl = req.body.pictureUrl;
+        const summary = req.body.summary;
 
         let errorMsg = false;
 
@@ -23,9 +25,12 @@ module.exports = {
         }
 
         if (errorMsg) {
-            res.render('article/create', {error: errorMsg, title, content});
+            res.render('article/create', {error: errorMsg, title, content, pictureUrl, summary});
             return;
         }
+
+        let articleArgs = req.body;
+        articleArgs.authorId = req.user.id;
 
         //find author
         const authorId = req.user.id;
@@ -33,14 +38,18 @@ module.exports = {
         const article = {
             title,
             content,
-            authorId
+            authorId,
+            pictureUrl,
+            summary
         };
         //record values in DB
         Article.create(article).then(article => {
             res.redirect('/');
+            return;
         }).catch(e => {
             console.log(e.message);
-            res.render('article/create', {error: e.message});
+            res.render('article/create', {error: e.message, title, content, authorId, pictureUrl, summary});
+            return;
         });
 
         //redirect to / home

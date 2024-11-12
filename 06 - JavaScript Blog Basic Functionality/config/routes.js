@@ -1,3 +1,4 @@
+const {user} = require("../controllers");
 const userController = require('../controllers').user;
 const homeController = require('../controllers').home;
 const articleController = require('../controllers').article;
@@ -17,6 +18,8 @@ module.exports = (app) =>{
     app.post('/article/create', articleController.createPost);
 
     app.get('/article/details/:id', articleController.details);
+
+    app.get('/user/details', userController.userInfo);
 
     app.get('*', (req, res) => {
         res.statusCode = 404;

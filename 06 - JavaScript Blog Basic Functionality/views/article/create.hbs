@@ -16,6 +16,18 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="col-sm-4 control-label" for="pictureUrl">Image URL</label>
+                    <div class="col-sm-4 ">
+                        <input type="text" class="form-control" id="pictureUrl" placeholder="Post yor URL" name="pictureUrl" required value="{{pictureUrl}}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label" for="summary">Summary</label>
+                    <div class="col-sm-6 ">
+                        <textarea class="form-control" id="summary" rows="5" name="summary" required>{{summary}}</textarea>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-sm-4 control-label" for="articleContent">Content</label>
                     <div class="col-sm-6">
                         <textarea class="form-control" id="articleContent" rows="5" name="content" required>{{content}}</textarea>

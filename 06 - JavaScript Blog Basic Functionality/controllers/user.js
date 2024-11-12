@@ -70,6 +70,15 @@ module.exports = {
         })
     },
 
+    userInfo: (req, res) => {
+        let userId = req.user.id;
+        User.findByPk(userId).then(user => {
+
+            res.render('user/details', user);
+
+        });
+    },
+
     logout: (req, res) => {
         req.logOut();
         res.redirect('/');
