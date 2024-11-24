@@ -398,6 +398,7 @@ FodyWeavers.xsd
 *.sln.iml
 # Exclude JetBrains IDE settings folder (WebStorm, IntelliJ, PyCharm)
 .idea/
+.vendor/
 
 # Exclude build output directories
 bin/
