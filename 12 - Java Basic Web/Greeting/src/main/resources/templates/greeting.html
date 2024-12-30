@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .spacer {
+            margin-bottom: 20px; /Add space between elements
+        }
+    </style>
+</head>
+<body>
+Hello, <b><span th:text="${name}"></span></b>!
+<div class="spacer"></div>
+<form>
+    Enter your name:
+    <div class="spacer"></div>
+    <input type="text" name="name"/>
+    <input type="submit" value="Greeting"/>
+</form>
+</body>
+</html>
