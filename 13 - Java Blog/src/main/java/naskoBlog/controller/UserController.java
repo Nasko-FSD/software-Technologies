@@ -1,5 +1,7 @@
 package naskoBlog.controller;
 
+import naskoBlog.entity.Article;
+import naskoBlog.repository.ArticleRepository;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,14 +23,20 @@ import naskoBlog.repository.RoleRepository;
 import naskoBlog.repository.UserRepository;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Controller
 public class UserController {
 
-    @Autowired
-    RoleRepository roleRepository;
-    @Autowired
-    UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
+    private final ArticleRepository articleRepository;
+
+    public UserController(RoleRepository roleRepository, UserRepository userRepository, ArticleRepository articleRepository) {
+        this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
+        this.articleRepository = articleRepository;
+    }
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -90,6 +98,23 @@ public class UserController {
 
         model.addAttribute("user", user);
         model.addAttribute("view", "user/profile");
+
+        return "base-layout";
+    }
+
+    @GetMapping("/myArticles")
+    @PreAuthorize("isAuthenticated()")
+    public String myArticles(Model model){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+
+        User user = this.userRepository.findByEmail(userDetails.getUsername());
+
+        List<Article> articleList = this.articleRepository.findAllByAuthor_id(user.getId());
+
+        model.addAttribute("view", "article/myArticles");
+        model.addAttribute("articles", articleList);
+        model.addAttribute("user", user);
 
         return "base-layout";
     }

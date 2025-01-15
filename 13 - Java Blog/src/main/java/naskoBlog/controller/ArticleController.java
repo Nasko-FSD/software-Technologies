@@ -5,8 +5,9 @@ import naskoBlog.entity.Article;
 import naskoBlog.entity.User;
 import naskoBlog.repository.ArticleRepository;
 import naskoBlog.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -65,6 +66,18 @@ public class ArticleController {
 
         Article article = this.articleRepository.findOne(id);
 
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        if(!(authentication instanceof AnonymousAuthenticationToken)){
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                    .getPrincipal();
+
+            User user = this.userRepository.findByEmail(userDetails.getUsername());
+
+            model.addAttribute("user", user);
+        }
+
         model.addAttribute("view", "article/details");
         model.addAttribute("article", article);
 
@@ -81,6 +94,10 @@ public class ArticleController {
 
         Article article = this.articleRepository.findOne(id);
 
+        if(isUserAuthorOrAdmin(article) == false){
+            return "redirect:/";
+        }
+
         model.addAttribute("view", "article/edit");
         model.addAttribute("article", article);
 
@@ -91,7 +108,15 @@ public class ArticleController {
     @PreAuthorize("isAuthenticated()")
     public String editProcess(ArticleBindingModel articleBindingModel, @PathVariable Integer id) {
 
+        if(this.articleRepository.exists(id) == false){
+            return "redirect:/";
+        }
+
         Article article = this.articleRepository.findOne(id);
+
+        if(isUserAuthorOrAdmin(article) == false){
+            return "redirect:/";
+        }
 
         article.setTitle(articleBindingModel.getTitle());
         article.setContent(articleBindingModel.getContent());
@@ -111,6 +136,10 @@ public class ArticleController {
 
         Article article = this.articleRepository.findOne(id);
 
+        if(isUserAuthorOrAdmin(article) == false){
+            return "redirect:/";
+        }
+
         model.addAttribute("view", "article/delete");
         model.addAttribute("article", article);
 
@@ -121,11 +150,28 @@ public class ArticleController {
     @PreAuthorize("isAuthenticated()")
     public String deleteProcess(@PathVariable Integer id) {
 
+        if(!this.articleRepository.exists(id)){
+            return "redirect:/";
+        }
+
         Article article = this.articleRepository.findOne(id);
+
+        if(isUserAuthorOrAdmin(article) == false){
+            return "redirect:/";
+        }
 
         this.articleRepository.delete(article);
 
         return "redirect:/";
+    }
+
+    private boolean isUserAuthorOrAdmin(Article article){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+
+        User user = this.userRepository.findByEmail(userDetails.getUsername());
+
+        return user.isAdmin() || user.isAuthor(article);
     }
 
 }
