@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <!-- Corrected framework -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Correct versions for .NET 5 -->
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="5.0.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+
+    <!-- MySQL package (remains at 6.10.6) -->
+    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.22" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="5.0.2" />
+  </ItemGroup>
+
+</Project>
